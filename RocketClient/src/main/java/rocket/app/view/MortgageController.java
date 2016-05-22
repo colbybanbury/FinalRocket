@@ -36,8 +36,10 @@ public class MortgageController {
 	@FXML
 	private TextField txtHouseCost;
 	//		ComboBox -	loan term... 15 year or 30 year
+	
 	@FXML
-	private ComboBox loanTermBox = new ComboBox();//can't get this to work :(
+	final ComboBox loanTermBox = new ComboBox(list);	//can't get this to work :(	
+	//I did what it said on Piazza and connected it in scene builder
 	
 	
 	//		Labels   -  various labels for the controls
@@ -58,12 +60,7 @@ public class MortgageController {
 	@FXML
 	private Label Payment;
 
-	@FXML
-	public void initialize() {
-	    loanTermBox.setValue("15 year loan");
-	    loanTermBox.setItems(list);
-
-	}
+	
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;

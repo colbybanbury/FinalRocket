@@ -1,10 +1,14 @@
 package rocket.app.view;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import eNums.eAction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -14,11 +18,11 @@ import rocketBase.RateBLL;
 import rocketCode.Action;
 import rocketData.LoanRequest;
 
-public class MortgageController {
+public class MortgageController implements Initializable{
 
 	private MainApp mainApp;
 	
-	ObservableList<String> list = FXCollections.observableArrayList("15 year loan", "30 year loan");
+	
 	
 	//	TODO - RocketClient.RocketMainController
 	
@@ -35,10 +39,13 @@ public class MortgageController {
 	//		TextBox  - 	txtHouseCost
 	@FXML
 	private TextField txtHouseCost;
+	
+	@FXML
+	private TextField txtDownPayment;
 	//		ComboBox -	loan term... 15 year or 30 year
 	
 	@FXML
-	final ComboBox loanTermBox = new ComboBox(list);	//can't get this to work :(	
+	private ComboBox loanTermBox = new ComboBox();	//can't get this to work :(	
 	//I did what it said on Piazza and connected it in scene builder
 	
 	
@@ -81,7 +88,7 @@ public class MortgageController {
 		//			set the loan request details...  rate, term, amount, credit score, downpayment
 		//			don't know how to get down payment or if it's even used for anything
 		//			I've created you an instance of lq...  execute the setters in lq
-		lq.setdAmount(Double.parseDouble(txtHouseCost.getText()));
+		lq.setdAmount((Double.parseDouble(txtHouseCost.getText()))-(Double.parseDouble(txtDownPayment.getText())));
 		lq.setIncome(Double.parseDouble(txtIncome.getText()));
 		lq.setExpenses(Double.parseDouble(txtExpenses.getText()));
 		lq.setiCreditScore(Integer.valueOf(txtCreditScore.getText()));
@@ -95,7 +102,7 @@ public class MortgageController {
 		//if statement for term
 			//my ComboBox doen't work but this will return a value of 30.
 			//that will later be multiplied by 12 to get number of monthly payments
-		if (loanTermBox.getPromptText() == "15 year loan"){
+		if (loanTermBox.getSelectionModel().getSelectedItem().toString() == "15 year loan"){
 			lq.setiTerm(15);
 		}
 		else{
@@ -132,10 +139,17 @@ public class MortgageController {
 		double pmt = lRequest.getdPayment();
 		
 		if (pmt>PITI){
-			Payment.setText(pmt+"  "+ PITI + "The payment for this loan exceeds your Maximum monthly payment");
+			Payment.setText("This loan exceeds your Maximum");
 		}
 		else{
-		Payment.setText(String.valueOf((double)Math.round(pmt * 1000d) / 1000d));
+		Payment.setText("Payment:" + String.valueOf((double)Math.round(pmt * 100d) / 100d)+ " Rate:" + String.valueOf(lRequest.getdRate())+"%");
 		}
+	}
+
+	ObservableList<String> list = FXCollections.observableArrayList("15 year loan", "30 year loan");
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		loanTermBox.setItems(list);
+		
 	}
 }

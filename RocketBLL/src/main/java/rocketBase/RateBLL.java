@@ -58,6 +58,7 @@ public class RateBLL {
 	public static double getPayment(int cs, double period, double p, double f, boolean t) throws RateException
 	{		
 		//calculating number of payments assuming monthly payments
-		return (-(FinanceLib.pmt((getRate(cs))/100, (period*12), p, f, t)));
+		System.out.println("////////////////////////////"+p +"    " +f+"    "+t);
+		return (-(FinanceLib.pmt((getRate(cs))/1200, (period*12), p, f, t)));
 	}
 }
